@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Switch, Route, Link, useParams } from "react-router-dom";
+import { Switch, Route, Link, useRouteMatch, Redirect, useHistory } from "react-router-dom";
 
 const Menu = (props) => {
   const padding = {
@@ -35,17 +35,20 @@ const AnecdoteList = ({ anecdotes }) => (
   </div>
 );
 
-const Anecdote = ({ anecdotes }) => {
-  const id = useParams().id
-  const anecdote = anecdotes.find(a => a.id === id)
+const Anecdote = ({ anecdote }) => {
   return (
     <div>
-      <h2>{anecdote.content} by {anecdote.author}</h2>
+      <h2>
+        {anecdote.content} by {anecdote.author}
+      </h2>
       <p>has {anecdote.votes} votes</p>
-      <p>for more info see <a href={anecdote.info} >{anecdote.info}</a></p>
+      <p>
+        for more info see <a href={anecdote.info}>{anecdote.info}</a>
+      </p>
     </div>
-  )
-}
+  );
+};
+
 
 const About = () => (
   <div>
@@ -152,12 +155,20 @@ const App = () => {
 
   const [notification, setNotification] = useState("");
 
+  const history = useHistory()
+
   const addNew = (anecdote) => {
     anecdote.id = (Math.random() * 10000).toFixed(0);
-    setAnecdotes(anecdotes.concat(anecdote));
+    setAnecdotes(anecdotes.concat(anecdote))
+    setNotification(`a new anecdote ${anecdote.content} created!`)
+    setTimeout(() => setNotification(''), 10000)
+    history.push('/')
   };
 
   const anecdoteById = (id) => anecdotes.find((a) => a.id === id);
+
+  const match = useRouteMatch("/anecdotes/:id");
+  const matchingAnecdote = match ? anecdoteById(match.params.id) : null;
 
   const vote = (id) => {
     const anecdote = anecdoteById(id);
@@ -174,6 +185,7 @@ const App = () => {
     <div>
       <h1>Software anecdotes</h1>
       <Menu anecdotes={anecdotes} />
+      {notification}
       <Switch>
         <Route path="/about">
           <About />
@@ -181,8 +193,8 @@ const App = () => {
         <Route path="/create">
           <CreateNew addNew={addNew} />
         </Route>
-        <Route path='/anecdotes/:id'>
-          <Anecdote anecdotes={anecdotes}/>
+        <Route path="/anecdotes/:id">
+          <Anecdote anecdote={matchingAnecdote} />
         </Route>
         <Route path="/">
           <AnecdoteList anecdotes={anecdotes} />
