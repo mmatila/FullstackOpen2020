@@ -1,5 +1,5 @@
-  
 import React from 'react'
+import Birthyear from './Birthyear'
 
 const Authors = (props) => {
   if (!props.show) {
@@ -30,6 +30,7 @@ const Authors = (props) => {
           )}
         </tbody>
       </table>
+      <Birthyear />
 
     </div>
   )
