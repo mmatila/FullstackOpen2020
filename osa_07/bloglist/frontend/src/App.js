@@ -7,12 +7,13 @@ import NewBlog from './components/NewBlog';
 import blogService from './services/blogs';
 import loginService from './services/login';
 import storage from './utils/storage';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { clear, notify } from './reducers/notification';
+import { getBlogs, createBlog as addBlog, updateBlog } from './reducers/blogs';
 
 const App = () => {
   const dispatch = useDispatch();
-  const [blogs, setBlogs] = useState([]);
+  const blogs = useSelector(({ blogs }) => blogs);
   const [user, setUser] = useState(null);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -20,7 +21,7 @@ const App = () => {
   const blogFormRef = React.createRef();
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs));
+    dispatch(getBlogs());
   }, []);
 
   useEffect(() => {
@@ -56,12 +57,11 @@ const App = () => {
     }
   };
 
-  const createBlog = async (blog) => {
+  const createBlog = (blog) => {
     try {
-      const newBlog = await blogService.create(blog);
+      dispatch(addBlog(blog));
       blogFormRef.current.toggleVisibility();
-      setBlogs(blogs.concat(newBlog));
-      notifyWith(`a new blog '${newBlog.title}' by ${newBlog.author} added!`);
+      notifyWith(`a new blog '${blog.title}' by ${blog.author} added!`)
     } catch (exception) {
       console.log(exception);
     }
@@ -70,8 +70,7 @@ const App = () => {
   const handleLike = async (id) => {
     const blogToLike = blogs.find((b) => b.id === id);
     const likedBlog = { ...blogToLike, likes: blogToLike.likes + 1, user: blogToLike.user.id };
-    await blogService.update(likedBlog);
-    setBlogs(blogs.map((b) => (b.id === id ? { ...blogToLike, likes: blogToLike.likes + 1 } : b)));
+    dispatch(updateBlog(likedBlog));
   };
 
   const handleRemove = async (id) => {
@@ -79,6 +78,7 @@ const App = () => {
     const ok = window.confirm(`Remove blog ${blogToRemove.title} by ${blogToRemove.author}`);
     if (ok) {
       await blogService.remove(id);
+      // eslint-disable-next-line no-undef
       setBlogs(blogs.filter((b) => b.id !== id));
     }
   };
