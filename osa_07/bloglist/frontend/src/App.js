@@ -4,12 +4,11 @@ import Notification from './components/Notification';
 import Togglable from './components/Togglable';
 import NewBlog from './components/NewBlog';
 
-import blogService from './services/blogs';
 import loginService from './services/login';
 import storage from './utils/storage';
 import { useDispatch, useSelector } from 'react-redux';
 import { clear, notify } from './reducers/notification';
-import { getBlogs, createBlog as addBlog, updateBlog } from './reducers/blogs';
+import { getBlogs, createBlog as addBlog, updateBlog, removeBlog } from './reducers/blogs';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -76,11 +75,7 @@ const App = () => {
   const handleRemove = async (id) => {
     const blogToRemove = blogs.find((b) => b.id === id);
     const ok = window.confirm(`Remove blog ${blogToRemove.title} by ${blogToRemove.author}`);
-    if (ok) {
-      await blogService.remove(id);
-      // eslint-disable-next-line no-undef
-      setBlogs(blogs.filter((b) => b.id !== id));
-    }
+    if (ok) dispatch(removeBlog(id));
   };
 
   const handleLogout = () => {

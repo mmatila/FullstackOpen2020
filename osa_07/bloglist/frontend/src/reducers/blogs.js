@@ -12,6 +12,8 @@ const reducer = (state = [], action) => {
         ? action.blog
         : blog
       );
+  case 'REMOVE':
+    return state.filter((blog) => blog.id !== action.id);
   default:
     return state;
   }
@@ -47,6 +49,18 @@ export const updateBlog = (updatedBlog) => async (dispatch) => {
     dispatch({
       type: 'UPDATE',
       blog
+    })
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export const removeBlog = (id) => async (dispatch) => {
+  try {
+    await blogService.remove(id)
+    dispatch({
+      type: 'REMOVE',
+      id
     })
   } catch (error) {
     console.log(error);
