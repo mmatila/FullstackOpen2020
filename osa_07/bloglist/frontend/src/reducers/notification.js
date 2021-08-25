@@ -11,12 +11,10 @@ const reducer = (state = null, action) => {
 
 export const notify = (notification) => (dispatch) => {
   dispatch({
-    type: 'CLEAR'
-  })
-  dispatch({
     type: 'NOTIFY',
     notification
   });
+  setTimeout(() => dispatch(clear()), 5000);
 }
 
 export const clear = () => (dispatch) => {
