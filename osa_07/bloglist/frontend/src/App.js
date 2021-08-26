@@ -1,5 +1,6 @@
 /* eslint-disable no-undef */
 import React, { useState, useEffect } from 'react';
+import { Typography, Box } from '@material-ui/core';
 import Blog from './components/Blog';
 import Notification from './components/Notification';
 import Togglable from './components/Togglable';
@@ -93,7 +94,9 @@ const App = () => {
     <div>
       <NavBar />
       <Notification />
-      <h2>blog app</h2>
+      <Box p={2}>
+        <Typography variant="h5">Blog app</Typography>
+      </Box>
 
       <Switch>
         <Route path="/" exact>

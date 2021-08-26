@@ -1,10 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { List, ListItemText as MUIListItem } from '@material-ui/core';
 
 const ListItem = ({ blog }) => {
   return (
     <div>
-      <Link to={`/blogs/${blog.id}`}>{`${blog.title} by ${blog.author}`}</Link>
+      <MUIListItem
+        primary={<Link to={`/blogs/${blog.id}`}>{`${blog.title}`}</Link>}
+        secondary={`by ${blog.author}, ${blog.likes} likes`}
+      />
     </div>
   );
 }
@@ -12,9 +16,11 @@ const ListItem = ({ blog }) => {
 const BlogList = ({ blogs }) => {
   return (
     <div>
-      {blogs.map((blog) =>
-        <ListItem key={blog.id} blog={blog} />
-      )}
+      <List>
+        {blogs.map((blog) =>
+          <ListItem key={blog.id} blog={blog} />
+        )}
+      </List>
     </div>
   );
 }
