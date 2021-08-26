@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const UsersTable = ({ users, blogs }) => {
   return (
@@ -17,7 +18,7 @@ const UsersTable = ({ users, blogs }) => {
             return(
               <tr key={user.id}>
                 <td>
-                  {user.name}
+                  <Link to={`/users/${user.id}`}>{user.name}</Link>
                 </td>
                 <td>
                   {blogAmount}

@@ -10,13 +10,21 @@ import { getBlogs, createBlog as addBlog, updateBlog, removeBlog } from './reduc
 import { login, logout, setUser } from './reducers/user';
 import UsersTable from './components/UsersTable';
 import { getAllUsers } from './reducers/users';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, useRouteMatch } from 'react-router-dom';
+import User from './components/User';
 
 const App = () => {
   const dispatch = useDispatch();
+
   const blogs = useSelector(({ blogs }) => blogs);
   const users = useSelector(({ users }) => users);
   const user = useSelector(({ user }) => user);
+
+  const userMatch = useRouteMatch('/users/:id')
+  const matchingUser = userMatch
+    ? users.find((user) =>  user.id === userMatch.params.id)
+    : null
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -116,8 +124,11 @@ const App = () => {
         />
       ))}
       <Switch>
-        <Route path="/users">
+        <Route path="/users" exact>
           <UsersTable blogs={blogs} users={users} />
+        </Route>
+        <Route path="/users/:id">
+          <User user={matchingUser} blogs={blogs} />
         </Route>
       </Switch>
     </div>
