@@ -24,8 +24,9 @@ const Blog = ({ blog }) => {
   const handleComment = (e) => {
     e.preventDefault();
     const updatedComments = blog.comments.concat(comment);
-    const updatedBlog = { ...blog, comments: updatedComments }
+    const updatedBlog = { ...blog, comments: updatedComments, user: blog.user.id }
     dispatch(updateBlog(updatedBlog));
+    setComment('');
   };
 
   return(

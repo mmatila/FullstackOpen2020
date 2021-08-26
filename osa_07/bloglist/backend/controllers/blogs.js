@@ -33,6 +33,7 @@ router.put('/:id', async (request, response) => {
   const blog = request.body
 
   const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
+  console.log(updatedBlog)
   response.json(updatedBlog.toJSON())
 })
 
@@ -53,6 +54,10 @@ router.post('/', async (request, response) => {
 
   if (!blog.likes) {
     blog.likes = 0
+  }
+
+  if (!blog.comments) {
+    blog.comments = []
   }
 
   blog.user = user
