@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { updateBlog, removeBlog } from '../reducers/blogs';
 
 const Blog = ({ blog }) => {
   const dispatch = useDispatch();
+  const [comment, setComment] = useState('');
 
   if (!blog) return null;
 
@@ -20,6 +21,13 @@ const Blog = ({ blog }) => {
     if (ok) dispatch(removeBlog(blog.id));
   };
 
+  const handleComment = (e) => {
+    e.preventDefault();
+    const updatedComments = blog.comments.concat(comment);
+    const updatedBlog = { ...blog, comments: updatedComments }
+    dispatch(updateBlog(updatedBlog));
+  };
+
   return(
     <div>
 
@@ -33,6 +41,29 @@ const Blog = ({ blog }) => {
         </div>
 
         <div>added by {blog.author}</div>
+
+        <div>
+          add comment:
+          <form onSubmit={handleComment} >
+            <input
+              type="text"
+              value={comment}
+              onChange={({ target }) => setComment(target.value)}
+            />
+            <button type="submit">submit</button>
+          </form>
+        </div>
+
+        {blog.comments && <div>
+        comments:
+          <ul>
+            {blog.comments.map(c =>
+              <li key={blog.comments.indexOf(c)}>
+                {c}
+              </li>
+            )}
+          </ul>
+        </div>}
 
         <button onClick={handleRemove}>remove</button>
       </div>
