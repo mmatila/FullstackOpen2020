@@ -7,12 +7,13 @@ import NewBlog from './components/NewBlog';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { getBlogs, createBlog as addBlog } from './reducers/blogs';
-import { login, logout, setUser } from './reducers/user';
+import { login, setUser } from './reducers/user';
 import UsersTable from './components/UsersTable';
 import { getAllUsers } from './reducers/users';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
 import User from './components/User';
 import BlogList from './components/BlogList';
+import NavBar from './components/NavBar';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -58,10 +59,6 @@ const App = () => {
     }
   };
 
-  const handleLogout = () => {
-    dispatch(logout());
-  };
-
   if (!user) {
     return (
       <div>
@@ -94,19 +91,15 @@ const App = () => {
 
   return (
     <div>
-
-      <h2>blogs</h2>
-
-      <p>
-        {user.name} logged in <button onClick={handleLogout}>logout</button>
-      </p>
-
-      <Togglable buttonLabel="create new blog" ref={blogFormRef}>
-        <NewBlog createBlog={createBlog} />
-      </Togglable>
+      <NavBar />
+      <Notification />
+      <h2>blog app</h2>
 
       <Switch>
         <Route path="/" exact>
+          <Togglable buttonLabel="create new blog" ref={blogFormRef}>
+            <NewBlog createBlog={createBlog} />
+          </Togglable>
           <BlogList blogs={blogs} />
         </Route>
         <Route path="/users" exact>
