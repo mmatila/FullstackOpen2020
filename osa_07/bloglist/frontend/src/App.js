@@ -8,10 +8,14 @@ import NewBlog from './components/NewBlog';
 import { useDispatch, useSelector } from 'react-redux';
 import { getBlogs, createBlog as addBlog, updateBlog, removeBlog } from './reducers/blogs';
 import { login, logout, setUser } from './reducers/user';
+import UsersTable from './components/UsersTable';
+import { getAllUsers } from './reducers/users';
+import { Route, Switch } from 'react-router-dom';
 
 const App = () => {
   const dispatch = useDispatch();
   const blogs = useSelector(({ blogs }) => blogs);
+  const users = useSelector(({ users }) => users);
   const user = useSelector(({ user }) => user);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -20,10 +24,8 @@ const App = () => {
 
   useEffect(() => {
     dispatch(getBlogs());
-  }, []);
-
-  useEffect(() => {
     dispatch(setUser(user))
+    dispatch(getAllUsers());
   }, []);
 
   const handleLogin = async (event) => {
@@ -113,6 +115,11 @@ const App = () => {
           own={user.username === blog.user.username}
         />
       ))}
+      <Switch>
+        <Route path="/users">
+          <UsersTable blogs={blogs} users={users} />
+        </Route>
+      </Switch>
     </div>
   );
 };
