@@ -1,38 +1,43 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+import { updateBlog, removeBlog } from '../reducers/blogs';
 
-const Blog = ({ blog, handleLike, handleRemove, own }) => {
-  const [visible, setVisible] = useState(false);
+const Blog = ({ blog }) => {
+  const dispatch = useDispatch();
 
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5,
+  if (!blog) return null;
+
+  const handleLike = async () => {
+    const blogToLike = blog;
+    const likedBlog = { ...blogToLike, likes: blogToLike.likes + 1, user: blogToLike.user.id };
+    dispatch(updateBlog(likedBlog));
   };
 
-  const label = visible ? 'hide' : 'view';
+  const handleRemove = async () => {
+    const blogToRemove = blog;
+    const ok = window.confirm(`Remove blog ${blogToRemove.title} by ${blogToRemove.author}`);
+    if (ok) dispatch(removeBlog(blog.id));
+  };
 
-  return (
-    <div style={blogStyle} className="blog">
+  return(
+    <div>
+
+      <h2>{blog.title}</h2>
+
       <div>
-        <i>{blog.title}</i> by {blog.author}{' '}
-        <button onClick={() => setVisible(!visible)}>{label}</button>
-      </div>
-      {visible && (
-        <div>
-          <div>{blog.url}</div>
-          <div>
-            likes {blog.likes}
-            <button onClick={() => handleLike(blog.id)}>like</button>
-          </div>
-          <div>{blog.user.name}</div>
-          {own && <button onClick={() => handleRemove(blog.id)}>remove</button>}
+        <a href={blog.url}>{blog.url}</a>
+
+        <div>{blog.likes} likes
+          <button onClick={handleLike}>like</button>
         </div>
-      )}
+
+        <div>added by {blog.author}</div>
+
+        <button onClick={handleRemove}>remove</button>
+      </div>
     </div>
-  );
+  )
 };
 
 Blog.propTypes = {
@@ -41,9 +46,6 @@ Blog.propTypes = {
     author: PropTypes.string.isRequired,
     url: PropTypes.string.isRequired,
   }).isRequired,
-  handleLike: PropTypes.func.isRequired,
-  handleRemove: PropTypes.func.isRequired,
-  own: PropTypes.bool.isRequired,
 };
 
 export default Blog;
