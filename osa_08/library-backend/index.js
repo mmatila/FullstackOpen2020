@@ -99,6 +99,10 @@ const typeDefs = gql`
       published: Int!
       genres: [String!]!
     ): Book
+    editAuthor(
+      name: String!
+      setBornTo: Int!
+    ): Author
   }
 
   type Book {
@@ -142,6 +146,21 @@ const resolvers = {
       authors.push(newAuthor);
 
       return newBook
+    },
+    editAuthor: (root, args) => {
+      const author = authors.find(({ name }) => name === args.name)
+      let editedAuthor = null;
+      
+      if (author) {
+        editedAuthor = { ...author, born: args.setBornTo }
+        authors = authors.filter((author) =>
+        author.id === editedAuthor.id
+          ? editedAuthor
+          : author
+        );
+      }
+
+      return editedAuthor
     }
   },
   Author: {
