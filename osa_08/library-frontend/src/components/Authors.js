@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useQuery } from '@apollo/client'
 
 import { ALL_AUTHORS } from '../queries'
+import EditAuthorForm from './EditAuthorForm';
 
 const Authors = ({ show }) => {
   const [authors, setAuthors] = useState([]);
@@ -38,7 +39,7 @@ const Authors = ({ show }) => {
           )}
         </tbody>
       </table>
-
+      <EditAuthorForm />
     </div>
   )
 }
