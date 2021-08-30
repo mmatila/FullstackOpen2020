@@ -55,14 +55,31 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    bookCount: () => books.length,
-    authorCount: () => authors.length,
+    bookCount: async () => await Book.countDocuments({}),
+    authorCount: async () => await Author.countDocuments({}),
     allAuthors: async () => await Author.find({}),
     allBooks: async (root, args) => {
-      let filteredBooks = await Book.find({});
-      if (args.author) filteredBooks = filteredBooks.filter(({ author }) => author === args.author)
-      if (args.genre) filteredBooks = filteredBooks.filter(({ genres }) => genres.includes(args.genre))
-      return filteredBooks;
+      if (args.genre && args.author) {
+        const author = await Author.find({ name: args.author });
+        return await Book
+          .find({
+            genres: { $in: args.genre },
+            author: author ? author : null
+          })
+          .populate('author');
+      }
+      if (args.genre) {
+        return await Book
+          .find({ genres: { $in: args.genre } })
+          .populate('author');
+      }
+      if (args.author) {
+        const author = await Author.find({ name: args.author });
+        return await Book
+          .find({ author: author ? author : null })
+          .populate('author')
+      }
+      return await Book.find({}).populate('author');
     },
   },
   Mutation: {
@@ -79,24 +96,11 @@ const resolvers = {
 
       return book;
     },
-    editAuthor: (root, args) => {
-      const author = authors.find(({ name }) => name === args.name)
-      let editedAuthor = null;
-      
-      if (author) {
-        editedAuthor = { ...author, born: args.setBornTo }
-        authors = authors.map((author) =>
-        author.id === editedAuthor.id
-          ? editedAuthor
-          : author
-        );
-      }
-
-      return editedAuthor
-    }
+    editAuthor: async (root, args) =>  await Author
+      .findOneAndUpdate({ name: args.name }, { born: args.setBornTo }, { new: true })
   },
   Author: {
-    bookCount: ({ name }) => books.filter(({ author }) => author === name).length
+    bookCount: async ({ id }) => await Book.countDocuments({ author: id })
   }
 };
 
