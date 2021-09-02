@@ -7,7 +7,7 @@ const EditAuthorForm = ({ authors }) => {
     refetchQueries: [ { query: ALL_AUTHORS }, { query: ALL_BOOKS } ]
   })
 
-  const [name, setName] = useState(authors[0].name);
+  const [name, setName] = useState('');
   const [born, setBorn] = useState('');
 
   const handleSubmit = (event) => {
@@ -29,8 +29,8 @@ const EditAuthorForm = ({ authors }) => {
         <div>
           name
           <select onChange={({ target }) => setName(target.value)}>
-            {authors.map(a =>
-              <option key={a.id} value={a.name}>{a.name}</option>
+            {authors.map((a, index) =>
+              <option key={index} value={a.name}>{a.name}</option>
             )}
           </select>
         </div>
