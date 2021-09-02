@@ -4,7 +4,7 @@ import { useQuery } from '@apollo/client'
 import { ALL_AUTHORS } from '../queries'
 import EditAuthorForm from './EditAuthorForm';
 
-const Authors = ({ show }) => {
+const Authors = ({ show, token }) => {
   const [authors, setAuthors] = useState([]);
   const result = useQuery(ALL_AUTHORS);
   
@@ -39,7 +39,7 @@ const Authors = ({ show }) => {
           )}
         </tbody>
       </table>
-      <EditAuthorForm authors={authors} />
+      {token && <EditAuthorForm authors={authors} />}
     </div>
   )
 }
