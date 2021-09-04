@@ -1,8 +1,9 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
-const { ApolloServer, gql, UserInputError, AuthenticationError } = require('apollo-server');
+const { ApolloServer, gql, UserInputError, AuthenticationError, PubSub } = require('apollo-server');
 const { v1: uuid } = require('uuid')
 const jwt = require('jsonwebtoken');
+const pubSub = new PubSub();
 
 const Author = require('./models/Author');
 const Book = require('./models/Book');
@@ -47,6 +48,10 @@ const typeDefs = gql`
       username: String!
       password: String!
     ): Token
+  }
+
+  type Subscription {
+    bookAdded: Book!
   }
 
   type Book {
@@ -136,6 +141,8 @@ const resolvers = {
       } catch (error) {
         throw new UserInputError(error.message, { invalidArgs: args.title });
       }
+
+      pubSub.publish('BOOK_ADDED', { bookAdded: book });
       
       return book;
     },
@@ -169,6 +176,11 @@ const resolvers = {
       return { value: jwt.sign(userForToken, JWT_SECRET) }
     },
   },
+  Subscription: {
+    bookAdded: {
+      subscribe: () => pubSub.asyncIterator(['BOOK_ADDED'])
+    }
+  },
   Author: {
     bookCount: async ({ id }) => await Book.countDocuments({ author: id })
   }
@@ -190,6 +202,7 @@ const server = new ApolloServer({
   },
 });
 
-server.listen().then(({ url }) => {
+server.listen().then(({ url, subscriptionsUrl }) => {
   console.log(`Server ready at ${url}`);
+  console.log(`Subscriptions ready at ${subscriptionsUrl}`);
 });
