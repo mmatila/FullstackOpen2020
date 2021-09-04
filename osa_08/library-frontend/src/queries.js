@@ -29,6 +29,16 @@ export const ALL_BOOKS = gql`
   }
 `;
 
+export const GET_CURRENT_USER = gql`
+  query Query {
+    me {
+      username
+      favoriteGenre
+      id
+    }
+  }
+`
+
 export const LOGIN = gql`
   mutation login($username: String!, $password: String!) {
     login(username: $username, password: $password)  {
