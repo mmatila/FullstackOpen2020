@@ -1,5 +1,5 @@
 type rating = 1 | 2 | 3;
-type ratingDescription = 'boo' | 'ayt, ayt' | 'sheeeesh'
+type ratingDescription = 'boo' | 'ayt, ayt' | 'sheeeesh';
 
 interface exerciseData {
   target: number,
@@ -14,7 +14,7 @@ interface result {
   ratingDescription: ratingDescription,
   target: number,
   average: number
-};
+}
 
 const generateRating = (average: number, target: number): rating => {
   switch (true) {
@@ -25,25 +25,25 @@ const generateRating = (average: number, target: number): rating => {
     default:
       return 3;
   }
-}
+};
 
 const getDescription = (rating: rating): ratingDescription => {
   switch (rating) {
     case 1:
-      return 'boo'
+      return 'boo';
     case 2:
-      return 'ayt, ayt'
+      return 'ayt, ayt';
     case 3:
       return 'sheeeesh';
   }
-}
+};
 
 const calculateExercises = (hours: Array<number>, target: number): result => {
-  const periodLength: number = hours.length
-  const trainingDays: number = hours.filter(hours => hours !== 0).length
+  const periodLength: number = hours.length;
+  const trainingDays: number = hours.filter(hours => hours !== 0).length;
   const average: number = hours.reduce((acc, curr) => curr + acc) / periodLength;
-  const success: boolean = average >= target
-  const rating: rating = generateRating(average, target)
+  const success: boolean = average >= target;
+  const rating: rating = generateRating(average, target);
   const ratingDescription: ratingDescription = getDescription(rating);
 
   return {
@@ -54,30 +54,30 @@ const calculateExercises = (hours: Array<number>, target: number): result => {
     ratingDescription,
     target,
     average
-  }
+  };
 };
 
 const parseArguments = (args: Array<string>): exerciseData => {
   if (args.length < 4) throw new Error('Not enough arguments');
-  const target = Number(args[2])
-  const hours = args.slice(3).map(hours => Number(hours))
+  const target = Number(args[2]);
+  const hours = args.slice(3).map(hours => Number(hours));
   const areValidHours = !hours.some(hours => isNaN(hours) || hours > 24);
 
   if (!isNaN(target) && areValidHours) {
     return {
       target,
       hours
-    }
+    };
   } else {
     throw new Error('Passed values are invalid, try again!');
   }
-}
+};
 
 try {
   const { target, hours } = parseArguments(process.argv);
   console.log(calculateExercises(hours, target));
 } catch (error) {
-  console.log(error.message)
+  console.log(error);
 }
 
 export default calculateExercises;
