@@ -1,11 +1,6 @@
 type rating = 1 | 2 | 3;
 type ratingDescription = 'boo' | 'ayt, ayt' | 'sheeeesh';
 
-interface exerciseData {
-  target: number,
-  hours: number[]
-}
-
 interface result {
   periodLength: number,
   trainingDays: number,
@@ -56,28 +51,5 @@ const calculateExercises = (hours: Array<number>, target: number): result => {
     average
   };
 };
-
-const parseArguments = (args: Array<string>): exerciseData => {
-  if (args.length < 4) throw new Error('Not enough arguments');
-  const target = Number(args[2]);
-  const hours = args.slice(3).map(hours => Number(hours));
-  const areValidHours = !hours.some(hours => isNaN(hours) || hours > 24);
-
-  if (!isNaN(target) && areValidHours) {
-    return {
-      target,
-      hours
-    };
-  } else {
-    throw new Error('Passed values are invalid, try again!');
-  }
-};
-
-try {
-  const { target, hours } = parseArguments(process.argv);
-  console.log(calculateExercises(hours, target));
-} catch (error) {
-  console.log(error);
-}
 
 export default calculateExercises;
