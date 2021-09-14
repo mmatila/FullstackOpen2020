@@ -14,7 +14,9 @@
     "start": "node build/index.js"
   },
   "dependencies": {
+    "@types/cors": "^2.8.12",
     "core-util-is": "^1.0.3",
+    "cors": "^2.8.5",
     "express": "^4.17.1"
   },
   "name": "patientor-backend",
