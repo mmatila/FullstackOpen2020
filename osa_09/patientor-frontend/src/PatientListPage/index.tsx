@@ -51,16 +51,17 @@ const PatientListPage = () => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {Object.values(patients).map((patient: Patient) => (
-            <Table.Row key={patient.id}>
+          {Object.values(patients).map((patient: Patient) => {
+            console.log(patient);
+            return (<Table.Row key={patient.id}>
               <Table.Cell>{patient.name}</Table.Cell>
               <Table.Cell>{patient.gender}</Table.Cell>
               <Table.Cell>{patient.occupation}</Table.Cell>
               <Table.Cell>
                 <HealthRatingBar showText={false} rating={1} />
               </Table.Cell>
-            </Table.Row>
-          ))}
+            </Table.Row>);
+          })}
         </Table.Body>
       </Table>
       <AddPatientModal

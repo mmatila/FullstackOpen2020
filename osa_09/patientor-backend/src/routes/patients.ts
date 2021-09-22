@@ -1,6 +1,7 @@
 import express from 'express';
 
 import patientsService from '../services/patientsService';
+import toNewPatient from '../utils/parser';
 
 const router = express.Router();
 
@@ -9,15 +10,14 @@ router.get('/', (_req, res) => {
 });
 
 router.post('/', (req, res) => {
-  const { name, dateOfBirth, ssn, gender, occupation } = req.body;
-  const newPatient = patientsService.addPatient({
-    name,
-    dateOfBirth,
-    ssn,
-    gender,
-    occupation
-  });
-  res.json(newPatient);
+  try {
+    const newPatient = toNewPatient(req.body);
+
+    const addedPatient = patientsService.addPatient(newPatient);
+    res.json(addedPatient);
+  } catch (e: any) {
+    res.status(400).send(e.message);
+  }
 })
 
 export default router;
