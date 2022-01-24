@@ -4,9 +4,8 @@ export interface CoursePartBase {
   type: string;
 }
 
-export interface CourseNormalPart extends CoursePartBase {
+export interface CourseNormalPart extends CourseNewPart {
   type: "normal";
-  description: string;
 }
 
 export interface CourseProjectPart extends CoursePartBase {
@@ -14,10 +13,13 @@ export interface CourseProjectPart extends CoursePartBase {
   groupProjectCount: number;
 }
 
-export interface CourseSubmissionPart extends CoursePartBase {
+export interface CourseSubmissionPart extends CourseNewPart {
   type: "submission";
-  description: string;
   exerciseSubmissionLink: string;
+}
+
+export interface CourseNewPart extends CoursePartBase {
+  description: string;
 }
 
 export type CoursePart = CourseNormalPart | CourseProjectPart | CourseSubmissionPart;
