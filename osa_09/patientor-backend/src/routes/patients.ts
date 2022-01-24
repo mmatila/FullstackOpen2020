@@ -9,6 +9,11 @@ router.get('/', (_req, res) => {
   res.send(patientsService.getPatients());
 });
 
+router.get('/:id', (req, res) => {
+  const patient = patientsService.getPatientById(req.params.id);
+  res.send(patient);
+});
+
 router.post('/', (req, res) => {
   try {
     const newPatient = toNewPatient(req.body);
