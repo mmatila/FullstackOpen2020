@@ -6,7 +6,7 @@ const Part = ({ part }: { part: CoursePart }) => {
     case "normal":
       return (
         <div>
-          <h1>{part.name}</h1>
+          <h3>{part.name}</h3>
           <p>{part.description}</p>
           <p>Exercise count: {part.exerciseCount}</p>
         </div>
@@ -14,7 +14,7 @@ const Part = ({ part }: { part: CoursePart }) => {
     case "groupProject":
       return (
         <div>
-          <h1>{part.name}</h1>
+          <h3>{part.name}</h3>
           <p>Exercise count: {part.exerciseCount}</p>
           <p>Group project count: {part.groupProjectCount}</p>
         </div>
@@ -22,7 +22,7 @@ const Part = ({ part }: { part: CoursePart }) => {
     case "submission":
       return (
         <div>
-          <h1>{part.name}</h1>
+          <h3>{part.name}</h3>
           <p>Exercise count: {part.exerciseCount}</p>
           <p>Description: {part.description}</p>
           <p>Exercise submission link: {part.exerciseSubmissionLink}</p>

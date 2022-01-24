@@ -22,4 +22,9 @@ export interface CourseNewPart extends CoursePartBase {
   description: string;
 }
 
-export type CoursePart = CourseNormalPart | CourseProjectPart | CourseSubmissionPart;
+export interface CourseSpecialPart extends CourseNewPart {
+  type: "special";
+  requirements: string[];
+}
+
+export type CoursePart = CourseNormalPart | CourseProjectPart | CourseSubmissionPart | CourseSpecialPart;
