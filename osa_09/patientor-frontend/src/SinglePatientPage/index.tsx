@@ -5,6 +5,7 @@ import { apiBaseUrl } from '../constants';
 import { setPatient, useStateValue } from '../state';
 import { Entry, Patient } from '../types';
 import { Divider } from 'semantic-ui-react';
+import EntryDetails from './EntryDetails';
 
 const SinglePatientPage = () => {
   const [{ patient, diagnoses }, dispatch] = useStateValue();
@@ -36,14 +37,7 @@ const SinglePatientPage = () => {
       <Divider hidden />
       <h3>entries</h3>
       {patient?.entries.map((entry: Entry) => (
-        <div key={entry.id}>
-          <p>{entry.description}</p>
-          <ul>
-            {entry.diagnosisCodes?.map((code) => (
-              <li key={code}>{code} {diagnoses[code].name}</li>
-            ))}
-          </ul>
-        </div>
+        <EntryDetails key={entry.id} entry={entry} diagnoses={diagnoses} />
       ))}
     </div>
   );  
