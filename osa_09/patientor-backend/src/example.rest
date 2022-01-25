@@ -1,0 +1,9 @@
+POST http://localhost:3001/api/patients/d2773336-f723-11e9-8f0b-362b9e155667/entries HTTP/1.1
+Content-Type: application/json
+
+{
+  "date": "2019-12-01",
+  "description": "some new entry",
+  "specialist": "MD",
+  "diagnosisCodes": ["Z57.1", "Z57.2"]
+} 
