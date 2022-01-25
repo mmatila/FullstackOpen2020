@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { apiBaseUrl } from '../constants';
 import { setPatient, useStateValue } from '../state';
-import { Patient } from '../types';
+import { Entry, Patient } from '../types';
 import { Divider } from 'semantic-ui-react';
 
 const SinglePatientPage = () => {
@@ -34,6 +34,18 @@ const SinglePatientPage = () => {
       <p>sex: {patient?.gender}</p>
       <p>ssn: {patient?.ssn}</p>
       <p>occupation: {patient?.occupation}</p>
+      <Divider hidden />
+      <h3>entries</h3>
+      {patient?.entries.map((entry: Entry) => (
+        <div key={entry.id}>
+          <p>{entry.description}</p>
+          <ul>
+            {entry.diagnosisCodes?.map((code) => (
+              <li key={code}>{code}</li>
+            ))}
+          </ul>
+        </div>
+      ))}
     </div>
   );  
 };
