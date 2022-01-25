@@ -7,7 +7,7 @@ import { Entry, Patient } from '../types';
 import { Divider } from 'semantic-ui-react';
 
 const SinglePatientPage = () => {
-  const [{ patient }, dispatch] = useStateValue();
+  const [{ patient, diagnoses }, dispatch] = useStateValue();
   const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
@@ -16,7 +16,6 @@ const SinglePatientPage = () => {
         const { data: patient } = await axios.get<Patient>(
           `${apiBaseUrl}/patients/${id}`
         );
-        console.log(patient);
         dispatch(setPatient(patient));
       } catch (e) {
         console.error(e);
@@ -41,7 +40,7 @@ const SinglePatientPage = () => {
           <p>{entry.description}</p>
           <ul>
             {entry.diagnosisCodes?.map((code) => (
-              <li key={code}>{code}</li>
+              <li key={code}>{code} {diagnoses[code].name}</li>
             ))}
           </ul>
         </div>
