@@ -52,9 +52,8 @@ const PatientListPage = () => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {Object.values(patients).map((patient: Patient) => {
-            console.log(patient);
-            return (<Table.Row key={patient.id}>
+          {Object.values(patients).map((patient: Patient, index: number) => {
+            return (<Table.Row key={index}>
               <Table.Cell>
                 <Link to={`/api/patients/${patient.id}`}>{patient.name}</Link>
               </Table.Cell>

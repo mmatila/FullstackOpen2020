@@ -16,6 +16,7 @@ const SinglePatientPage = () => {
         const { data: patient } = await axios.get<Patient>(
           `${apiBaseUrl}/patients/${id}`
         );
+        console.log(patient);
         dispatch(setPatient(patient));
       } catch (e) {
         console.error(e);
